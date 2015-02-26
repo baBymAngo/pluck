@@ -1,0 +1,80 @@
+@import 'reset.css', 'typeahead.css', 'animate.css';
+
+$header-height : 75px;
+$green: #142114;
+
+body {
+	font-size: 17px;
+	font-family: 'Open Sans', sans-serif;
+	line-height: 1.4;
+}
+
+.margin-container {
+	position: relative;
+	max-width: 900px;
+	margin: 0 auto;
+	height: 100%;
+}
+
+#header, #footer {
+	position: relative;
+	width: 100%;
+	height: $header-height;
+	background: green;
+}
+
+#search-area, #map {
+	position: relative;
+	width: 100%;
+	height: 800px;
+}
+
+#search-area {
+	z-index: 9999;
+	background-color: green;
+	display: none;
+}
+
+#map {
+	position: absolute;
+	top: $header-height; left: 0;
+}
+
+.center {
+	position: absolute;
+	top: 50%; left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#add-marker {
+	width: 50px;
+	height: 50px;
+	padding: 20px;
+	color: white;
+	border-radius: 50%;
+	background-color: green;
+	position: fixed;
+	bottom: 20px; right: 50px;
+	display: inline-block;
+	&:hover {
+		cursor: pointer;
+	}
+}
+
+#new-source-form {
+	height: 100%;
+	width: 300px;
+	position: absolute;
+	top:0; right: 0;
+	background: green;
+	z-index: 9999;
+
+	.form-close {
+		padding: 5px;
+		right: 5px;
+		display: inline-block;
+		&:hover {
+			cursor: pointer;
+		}
+	}
+}

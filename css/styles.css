@@ -1,0 +1,73 @@
+@import url(reset.css);
+@import url(typeahead.css);
+@import url(animate.css);
+body {
+  font-size: 17px;
+  font-family: 'Open Sans', sans-serif;
+  line-height: 1.4; }
+
+.margin-container {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  height: 100%; }
+
+#header, #footer {
+  position: relative;
+  width: 100%;
+  height: 75px;
+  background: green; }
+
+#search-area, #map {
+  position: relative;
+  width: 100%;
+  height: 800px; }
+
+#search-area {
+  z-index: 9999;
+  background-color: green;
+  display: none; }
+
+#map {
+  position: absolute;
+  top: 75px;
+  left: 0; }
+
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%); }
+
+#add-marker {
+  width: 50px;
+  height: 50px;
+  padding: 20px;
+  color: white;
+  border-radius: 50%;
+  background-color: green;
+  position: fixed;
+  bottom: 20px;
+  right: 50px;
+  display: inline-block; }
+  #add-marker:hover {
+    cursor: pointer; }
+
+#new-source-form {
+  height: 100%;
+  width: 300px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: green;
+  z-index: 9999; }
+  #new-source-form .form-close {
+    padding: 5px;
+    right: 5px;
+    display: inline-block; }
+    #new-source-form .form-close:hover {
+      cursor: pointer; }
+
+/*# sourceMappingURL=styles.css.map */

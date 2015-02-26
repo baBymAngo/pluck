@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>Pluck</title>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="css/styles.css">
+	<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css' rel='stylesheet' />
+	<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.4/leaflet.fullscreen.css' rel='stylesheet' />
+</head>
+<body>
+
+<header id="header">
+
+</header>
+
+<main>
+
+<!-- Google Map -->
+<div id="map"></div>
+
+Add Source
+<a id="add-marker"></a>
+
+<!-- New Source Form -->
+<aside id="new-source-form">
+	<span class="form-close">x</span>
+	<form action="#">
+		<h4>What did you find?</h4>
+		<input type="text" class="source-name" name="source-name">
+
+		<h4>Where did you find it?</h4>
+		<label for="source-address">Address</label>
+		<input type="text" class="source-address" name="source-address">
+		<span>or</span>
+		<label>Location</label>
+		<input type="text" class="source-lat">
+		<input type="text" class="source-lng">
+
+		<h4>And you are?</h4>
+		<input type="text" class="source-finder">
+
+		<h4>What's it like?</h4>
+		<textarea class="source-description"></textarea>
+
+		<input type="submit">
+	</form>
+</aside>
+
+<!-- Search Area -->
+<section id="search-area">
+	<form id="search" class="center" name="city">
+		<h1>Hey There!</h1>
+		<p>Where are you looking to forage?</p>
+		<input id="address" class="typeahead" type="text" placeholder="Enter Your City" required >
+		<button type="submit">Explore</button>
+	</form>
+</section>
+
+</main>
+
+<!-- Google Maps -->
+<script src="http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+<!-- jQuery -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+<!-- Typeahead -->
+<script src="js/typeahead.bundle.js"></script>
+<!-- Address Picker -->
+<script src="js/typeahead-addresspicker.min.js"></script>
+<script src="js/search.js"></script>
+
+<!-- Mapbox -->
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.4/Leaflet.fullscreen.min.js'></script>
+<script>
+	/* Initialize Map */
+	L.mapbox.accessToken = 'pk.eyJ1IjoibGNzY290dDEyMyIsImEiOiJfZ1U0TEFvIn0.lEuJ1nMMtiksG5APb8n53w';
+	var map = L.mapbox.map('map', 'lcscott123.l6c260lg');
+
+	/* Map Plugins */
+	L.control.fullscreen().addTo(map);
+
+	/* Right Mouse Click */
+	$map = $(map);
+	$map.one('mousedown', function(e){
+		if ( isRightClick(e) ) {	
+			marker = addMarker(e);
+
+			var a = getCoordinates(e);
+			updateFormData(a[0], a[1]);
+			// other right mouse clicks
+			$map.on('mousedown', function(e){
+				if ( isRightClick(e) ) {
+					var newCoords = e.originalEvent.latlng;
+					marker.setLatLng(newCoords).openPopup();
+					updateFormData(newCoords.lat, newCoords.lng);
+				}
+			});
+		}
+	});
+
+	/* Add New Source */
+	$('a.new-source').on('click', function(e){
+		alert("yay");
+		map.panTo(marker.getLatLng);
+	});
+
+	/* Utility Functions */
+	function isRightClick(e){
+		return e.originalEvent.originalEvent.button === 2;	
+	}
+
+	function addMarker(e) {
+		var coord = getCoordinates(e),
+			popupContent = '<a href="#" class="new-source">Create a new source here</a><br><p>Click or drag this icon to change location</p>',
+			popUp = newPopup(popupContent),
+
+			newMarker = L.marker( new L.LatLng(coord[0], coord[1]), { 
+				icon: L.mapbox.marker.icon({
+			        'marker-color': 'ff8888'
+		    	}),
+				draggable: true
+			});
+
+			newMarker
+				.bindPopup( popUp )
+				.addTo( map )
+				.openPopup();
+
+			return newMarker;
+	}
+
+	function getCoordinates(e) {
+		var c = e.originalEvent.latlng;
+		return [c.lat, c.lng];
+	}
+
+	function newPopup(content) {
+		return L.popup().setContent( content );
+	}
+
+	function updateFormData(lat, lng){
+
+		// update form location
+		$('input.source-lat').val(lat);
+		$('input.source-lng').val(lng);
+
+		// update address from google api
+		$.ajax({ 
+			url:'http://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&sensor=true',
+         	success: function(data){
+         		console.log(data.results[0].formatted_address);
+             	$('input.source-address').val(data.results[0].formatted_address); 
+         	}
+		});
+	}
+
+</script>
+
+</body>
+</html>
